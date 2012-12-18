@@ -8,7 +8,7 @@ module TestML
   def self.run &runner
     name = _get_test_name
     $testml_runners[name] = runner
-    TestML::Fake::TestCases.send(:define_method, name) do
+    TestML::Lite::TestCases.send(:define_method, name) do
       _run_runner name
     end
   end
@@ -26,7 +26,7 @@ end
 $testml_runners ||= {}
 $testml_data ||= {}
 
-class TestML::Fake < Test::Unit::TestCase
+class TestML::Lite < Test::Unit::TestCase
   def data input
     unless input.match /\n/
       File.open(input, 'r') {|f| input = f.read}
@@ -190,7 +190,7 @@ class TestML::Fake < Test::Unit::TestCase
            string_block.gsub! /\A---\ +(\w+)\n(.*?)(?=^---|\z)/m, ''
           key, value = $1, $2
         else
-          raise "Failed to parse FakeTestML string:\n#{string_block}"
+          raise "Failed to parse TestML string:\n#{string_block}"
         end
         block[:points] ||= {}
         block[:points][key] = value
@@ -215,4 +215,4 @@ def _get_test_name
   return "test_#{name}"
 end
 
-module TestML::Fake::TestCases;end
+module TestML::Lite::TestCases;end
