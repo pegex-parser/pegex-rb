@@ -1,6 +1,7 @@
 # Make sure tests have access to the application libs and the testing libs.
 $:.unshift File.dirname(__FILE__)
-$:.unshift File.dirname(__FILE__) + '/../../lib'
+$:.unshift File.dirname(__FILE__) + '/..'
+$:.unshift File.dirname(__FILE__) + '/../../../lib'
 
 require 'test/unit'
 
