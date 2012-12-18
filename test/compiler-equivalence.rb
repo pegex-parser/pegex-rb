@@ -1,11 +1,12 @@
 require './test/lib/test_pegex'
 
-testml_run do |t|
-  t.require_or_skip 'psych'
+TestML.require_or_skip 'psych'
+
+TestML.run do |t|
   t.eval '*grammar1.compile.yaml == *grammar2.compile.yaml'
 end
 
-testml_data <<'...'
+TestML.data <<'...'
 === Simple Test Case
 --- grammar1
 a: /x/

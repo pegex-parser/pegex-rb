@@ -1,8 +1,8 @@
 require './test/lib/test_pegex'
 
-testml_run do |t|
-  t.require_or_skip 'psych'
+TestML.require_or_skip 'psych'
 
+TestML.run do |t|
   files = [
     'test/tree.tml',
     'test/tree-pegex.tml',

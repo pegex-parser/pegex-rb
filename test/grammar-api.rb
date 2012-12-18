@@ -13,7 +13,7 @@ baz: /def/
   end
 end
 
-testml_run do |t|
+TestML.run do |t|
   g1 = MyGrammar1.new
   g1.make_tree
   t.assert_equal g1.tree['+toprule'], 'foo',

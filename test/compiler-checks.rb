@@ -1,11 +1,12 @@
 require './test/lib/test_pegex'
 
-testml_run do |t|
-  t.require_or_skip 'psych'
+TestML.require_or_skip 'psych'
+
+TestML.run do |t|
   t.eval '*grammar.compile.yaml.clean == *yaml'
 end
 
-testml_data <<'...'
+TestML.data <<'...'
 === Empty Grammar
 --- grammar
 --- yaml

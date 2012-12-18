@@ -1,6 +1,6 @@
 require './test/lib/test_pegex'
 
-testml_run do |t|
+TestML.run do |t|
   require 'pegex'
   t.assert method('pegex'),
     'pegex is exported'

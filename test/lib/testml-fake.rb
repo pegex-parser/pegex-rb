@@ -4,29 +4,29 @@ $:.unshift File.dirname(__FILE__) + '/../../lib'
 
 require 'test/unit'
 
-module TestML;end
+module TestML
+  def self.run &runner
+    name = _get_test_name
+    $testml_runners[name] = runner
+    TestML::Fake::TestCases.send(:define_method, name) do
+      _run_runner name
+    end
+  end
+
+  def self.data data
+    $testml_data[_get_test_name] = data
+  end
+
+  def self.require_or_skip module_
+    require module_
+    rescue exit
+  end
+end
 
 $testml_runners ||= {}
 $testml_data ||= {}
 
-def testml_run &runner
-  name = _get_test_name
-  $testml_runners[name] = runner
-  TestML::Fake::TestCases.send(:define_method, name) do
-    _run_runner name
-  end
-end
-
-def testml_data data
-  $testml_data[_get_test_name] = data
-end
-
 class TestML::Fake < Test::Unit::TestCase
-  def require_or_skip module_
-    require module_
-    rescue exit
-  end
-
   def data input
     unless input.match /\n/
       File.open(input, 'r') {|f| input = f.read}

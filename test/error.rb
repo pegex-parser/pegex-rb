@@ -1,6 +1,6 @@
 require './test/lib/test_pegex'
 
-testml_run do |t|
+TestML.run do |t|
   t.eval 'parse_input(*grammar, *input).Catch ~~ *error'
 end
 
@@ -11,7 +11,7 @@ class TestPegex
   end
 end
 
-testml_data <<'...'
+TestML.data <<'...'
 === Error fails at furthest match
 # XXX This one not testing much.
 --- grammar
