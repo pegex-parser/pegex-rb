@@ -1,9 +1,10 @@
 # encoding: utf-8
 
-$gemspec = Gem::Specification.new do |gem|
+GemSpec = Gem::Specification.new do |gem|
   gem.name = 'pegex'
   gem.version = '0.0.1'
   gem.license = 'MIT'
+  gem.required_ruby_version = '>= 1.9.1'
 
   gem.authors << 'Ingy döt Net'
   gem.email = 'ingy@ingy.net'
@@ -14,16 +15,5 @@ that will work equivalently in lots of programming languages!
 .
   gem.homepage = 'http://pegex.org'
 
-  gem.files = Dir.glob(%w(
-    bin/*
-    lib/**/*
-    test/**/*
-
-    *.gemspec
-    Gemfile
-    Rakefile
-    CHANGELOG*
-    LICENSE*
-    README*
-  ))
+  gem.files = `git ls-files`.lines.map{|l|l.chomp}
 end
