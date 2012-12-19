@@ -16,4 +16,6 @@ that will work equivalently in lots of programming languages!
   gem.homepage = 'http://pegex.org'
 
   gem.files = `git ls-files`.lines.map{|l|l.chomp}
+
+  gem.add_development_dependency 'testml-lite', '>= 0.0.1'
 end
