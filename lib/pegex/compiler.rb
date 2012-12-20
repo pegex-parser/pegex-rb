@@ -3,6 +3,10 @@ require 'pegex/pegex/grammar'
 require 'pegex/pegex/ast'
 require 'pegex/grammar/atoms'
 
+# TODO:
+# Regenerate #make_tree's (or just #tree's?) similar to this:
+#  ruby -rpp -rpegex/compiler -e 'pp Pegex::Compiler.new.compile(File.read "share/jsony.pgx").tree''
+
 class Pegex::Compiler
   attr_accessor :tree
 

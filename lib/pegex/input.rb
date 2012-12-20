@@ -18,11 +18,8 @@ class Pegex::Input
   end
 
   def open
-    if defined? @string
-      @buffer = @string
-    else
-      fail "Pegex::Input::open failed. No source to open"
-    end
+    @buffer = @string \
+      or fail "Pegex::Input::open failed. No source to open"
     @is_open = true
   end
 

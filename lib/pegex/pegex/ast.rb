@@ -113,7 +113,7 @@ class Pegex::Pegex::AST < Pegex::Tree
   def got_regular_expression got
     got.gsub! /\s*#.*\n/, ''
     got.gsub! /\s+/, ''
-    got.gsub! /\  \:|\=|\!/, " ?#{$1}"
+    got.gsub! /\((\:|\=|\!)/, '(?\1'
     return {'.rgx' => got}
   end
 
