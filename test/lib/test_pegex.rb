@@ -1,8 +1,6 @@
-require './test/lib/testml/lite'
+require 'testml/lite'
 require 'pegex/compiler'
 require 'recursive_sort'
-
-require 'xxx'; # XXX
 
 class TestPegex < TestML::Lite
   include TestML::Lite::TestCases
