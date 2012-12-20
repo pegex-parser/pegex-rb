@@ -1,0 +1,7 @@
+- Finish porting tests from perl
+- Support grammar self compile:
+  > ruby -Ilib -rfoo/grammar -ecompile
+- Use pegex-tml
+- Use pegex-pgx
+
+- Move optimize into pegex/grammar or pegex/compiler
