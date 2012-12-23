@@ -1,3 +1,4 @@
+- Use pp tree instead of JSON in pegex/pegex/grammar
 - Finish porting tests from perl
 - Support grammar self compile:
   > ruby -Ilib -rfoo/grammar -ecompile
