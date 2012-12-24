@@ -1,4 +1,7 @@
-require './test/lib/test_pegex'
+require 'testml/lite'
+require 'test_pegex'
+
+TestML::Test.new
 
 __END__
 #TODO

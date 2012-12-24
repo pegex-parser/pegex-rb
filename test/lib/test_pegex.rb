@@ -1,10 +1,7 @@
-require 'testml/lite'
 require 'pegex/compiler'
 require 'recursive_sort'
 
-class TestPegex < TestML::Lite
-  include TestML::Lite::TestCases
-
+class TestPegex < TestML::Bridge
   def compile grammar_text
     $grammar_text = grammar_text
     tree = Pegex::Compiler.new.parse(grammar_text).combinate.tree
