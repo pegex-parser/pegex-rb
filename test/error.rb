@@ -1,9 +1,11 @@
-require './test/lib/test_pegex'
+require 'testml/lite'
+require 'test_pegex'
 
-TestML.run do |t|
-  t.eval 'parse_input(*grammar, *input).Catch ~~ *error'
+testml = TestML::Test.new do |t|
+  t.bridge = TestPegex
 end
 
+# Add parse_input to bridge class:
 class TestPegex
   def parse_input grammar, input
     parser = pegex grammar
@@ -11,7 +13,9 @@ class TestPegex
   end
 end
 
-TestML.data <<'...'
+testml.document = <<'...'
+parse_input(*grammar, *input).Catch ~~ *error;
+
 === Error fails at furthest match
 # XXX This one not testing much.
 --- grammar
