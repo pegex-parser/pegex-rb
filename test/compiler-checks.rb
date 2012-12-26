@@ -1,12 +1,9 @@
 require 'testml/lite'
 require 'test_pegex'
 
-testml = TestML::Test.new do |t|
-  t.require_or_skip 'psych'
-  t.bridge = TestPegex
-end
-
-testml.document = <<'...'
+TestML::Test.new \
+  bridge: TestPegex,
+  document: <<'...'
 *grammar.compile.yaml.clean == *yaml;
 
 === Empty Grammar

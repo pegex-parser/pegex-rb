@@ -5,8 +5,6 @@ TestML::Test.new
 
 __END__
 #TODO
-TestML.require_or_skip 'psych'
-
 TestML.run do |t|
   t.eval '*grammar.compile.optimize.yaml.clean == *yaml'
 end

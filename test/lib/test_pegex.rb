@@ -10,8 +10,8 @@ class TestPegex < TestML::Bridge
   end
 
   def yaml object
-    require 'psych'
-    Psych.dump object.recursive_sort
+    require 'yaml'
+    YAML.dump object.recursive_sort
   end
 
   def clean yaml

@@ -422,7 +422,7 @@ a:
 - - b: b
   - b: b
 
-# TODO - deal with psych null output
+# TODO - deal with yaml null output
 === False Values
 --- grammar
 a: <zero> <empty> <undef>

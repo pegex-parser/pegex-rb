@@ -2,7 +2,6 @@ require 'testml/lite'
 require 'test_pegex'
 
 testml = TestML::Test.new do |t|
-  t.require_or_skip 'psych'
   t.bridge = TestPegex
   t.tmlfile = 'test/compiler.tml'
 end

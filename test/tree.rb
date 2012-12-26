@@ -1,8 +1,6 @@
 require 'testml/lite'
 
-TestML::Test.new do |t|
-  t.require_or_skip 'psych'
-end
+TestML::Test.new
 
 TestML.run do |t|
   files = [
