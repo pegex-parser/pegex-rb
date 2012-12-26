@@ -1,6 +1,8 @@
-require './test/lib/test_pegex'
+require 'testml/lite'
 
-TestML.require_or_skip 'psych'
+TestML::Test.new do |t|
+  t.require_or_skip 'psych'
+end
 
 TestML.run do |t|
   files = [

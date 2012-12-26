@@ -1,4 +1,4 @@
-= Pegex - Acmeist PEG Parsing Framework
+= pegex - Acmeist PEG Parsing Framework
 
 Pegex is a Acmeist parser framework. It allows you to easily create
 parsers that will work equivalently in lots of programming languages!
@@ -29,35 +29,37 @@ or more explicitly:
 
 = Description
 
-Pegex is a Acmeist parser framework. It allows you to easily create parsers
-that will work equivalently in lots of programming languages!
+Pegex is a Acmeist parser framework. It allows you to easily create
+parsers that will work equivalently in lots of programming languages!
 
-Pegex gets it name by combining Parsing Expression Grammars (PEG), with
-Regular Expessions (Regex). That's actually what Pegex does.
+Pegex gets it name by combining Parsing Expression Grammars (PEG),
+with Regular Expessions (Regex). That's actually what Pegex does.
 
-PEG is the cool new way to elegantly specify recursive descent grammars. The
-Perl 6 language is defined in terms of a self modifying PEG language called
-*Perl 6 Rules*. Regexes are familiar to programmers of most modern
-programming languages. Pegex defines a simple PEG syntax, where all the
-terminals are regexes. This means that Pegex can be quite fast and powerful.
+PEG is the cool new way to elegantly specify recursive descent
+grammars. The Perl 6 language is defined in terms of a self modifying
+PEG language called *Perl 6 Rules*. Regexes are familiar to
+programmers of most modern programming languages. Pegex defines a
+simple PEG syntax, where all the terminals are regexes. This means
+that Pegex can be quite fast and powerful.
 
-Pegex attempts to be the simplest way to define new (or old) Domain Specific
-Languages (DSLs) that need to be used in several programming languages and
-environments.
+Pegex attempts to be the simplest way to define new (or old) Domain
+Specific Languages (DSLs) that need to be used in several programming
+languages and environments.
 
 = Usage
 
-The +pegex.rb+ module itself is just a trivial way to use the
-Pegex framework. It is only intended for the simplest of uses.
+The +pegex.rb+ module itself is just a trivial way to use the Pegex
+framework. It is only intended for the simplest of uses.
 
-+pegex.rb+ defines a single function, +pegex+, which takes a Pegex grammar
-string as input. You may also pass in a receiver class or object.
++pegex.rb+ defines a single function, +pegex+, which takes a Pegex
+grammar string as input. You may also pass in a receiver class or
+object.
 
     parser = pegex(grammar, MyReceiver)
 
-The +pegex+ function returns a Pegex::Parser object, on which you would
-typically call the +parse()+ method, which (on success) will return a data
-structure of the parsed data.
+The +pegex+ function returns a Pegex::Parser object, on which you
+would typically call the +parse()+ method, which (on success) will
+return a data structure of the parsed data.
 
 See Pegex::API for more details.
 
@@ -66,10 +68,10 @@ See Pegex::API for more details.
 This Pegex library was ported to Ruby from the Perl module:
 http://search.cpan.org/dist/Pegex/
 
-The code and tests were fully ported from Perl to Ruby. Pegex should work
-exactly the same in both languages. The documentation and examples have not yet
-been fully ported, but they will be soon enough. For now, refer to the Perl
-docs.
+The code and tests were fully ported from Perl to Ruby. Pegex should
+work exactly the same in both languages. The documentation and
+examples have not yet been fully ported, but they will be soon enough.
+For now, refer to the Perl docs.
 
 You can start here: http://search.cpan.org/dist/Pegex/lib/Pegex.pod
 

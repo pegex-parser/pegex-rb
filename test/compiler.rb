@@ -1,8 +1,11 @@
-require './test/lib/test_pegex'
+require 'testml/lite'
+require 'test_pegex'
 
-TestML.require_or_skip 'psych'
-
-TestML.data 'test/compiler.tml'
+testml = TestML::Test.new do |t|
+  t.require_or_skip 'psych'
+  t.bridge = TestPegex
+  t.tmlfile = 'test/compiler.tml'
+end
 
 TestML.run do |t|
   t.eval '*grammar', t.method('run_compiler_tests')
