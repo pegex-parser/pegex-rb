@@ -177,10 +177,12 @@ class Pegex::Parser
   end
 
   def match_rgx regexp, parent=nil
+    # TODO no need for position variable. just use @position
     position = @position
     string = @buffer[position .. -1]
     (m = string.match regexp) or return false
     position += m[0].length
+    # TODO use m.captures
     match = m[1..-1]
     match = [ match ] if m.length > 2
     @farthest = position if (@position = position) > @farthest

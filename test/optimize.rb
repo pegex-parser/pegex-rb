@@ -1,16 +1,11 @@
-puts "TODO";exit
-require 'testml/lite'
+require 'testml'
 require 'test_pegex'
 
-TestML::Test.new
+TestML::Lite.new \
+  bridge: TestPegex,
+  testml: <<'...'
+*grammar.compile.optimize.yaml.clean == *yaml
 
-__END__
-#TODO
-TestML.run do |t|
-  t.eval '*grammar.compile.optimize.yaml.clean == *yaml'
-end
-
-TestML.data <<'...'
 === Question Mark Expansion
 --- grammar
 a: /(:foo)/

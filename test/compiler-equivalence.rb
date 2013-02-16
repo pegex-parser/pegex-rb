@@ -1,9 +1,9 @@
-require 'testml/lite'
+require 'testml'
 require 'test_pegex'
 
-TestML::Test.new \
+TestML::Lite.new \
   bridge: TestPegex,
-  document: <<'...'
+  testml: <<'...'
 *grammar1.compile.yaml == *grammar2.compile.yaml;
 
 === Simple Test Case

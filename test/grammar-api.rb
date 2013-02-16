@@ -1,6 +1,20 @@
-puts "TODO";exit
-require './test/lib/test_pegex'
+require 'testml'
+require 'test_pegex'
 require 'pegex/grammar'
+
+TestML::Lite.new testml: <<'...'
+Plan = 1
+# Label = 'MyGrammar1 compiled a tree from its text'
+grammar_api == 'foo'
+...
+
+class TestML::Lite::Library
+  def grammar_api
+    grammar = MyGrammar1.new
+    grammar.make_tree
+    grammar.tree['+toprule']
+  end
+end
 
 class MyGrammar1 < Pegex::Grammar
   def initialize
@@ -12,11 +26,4 @@ bar:
 baz: /def/
 ...
   end
-end
-
-TestML.run do |t|
-  g1 = MyGrammar1.new
-  g1.make_tree
-  t.assert_equal g1.tree['+toprule'], 'foo',
-    'MyGrammar1 compiled a tree from its text'
 end

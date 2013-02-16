@@ -1,3 +1,5 @@
+- Support grammar inheritance
+
 - Use pp tree instead of JSON in pegex/pegex/grammar
 - Finish porting tests from perl
 - Support grammar self compile:

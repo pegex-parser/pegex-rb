@@ -1,44 +1,30 @@
-puts "TODO";exit
-require 'testml/lite'
+require 'testml'
 
-TestML::Test.new
+require 'pegex/tree'
+require 'pegex/tree/wrap'
+require 'testast'
 
-TestML.run do |t|
-  files = [
-    'test/tree.tml',
-    'test/tree-pegex.tml',
-  ]
+TestML::Lite.new testml: <<'...'
+Plan = 1
 
-  files.each do |f|
-    t.data f
-    t.eval '*grammar', t.method('run_tree_tests')
-  end
-end
+Data = Compile('tree.tml')
+Label = '$BlockLabel - Pegex::Tree'
+parse_to_tree('Pegex::Tree', *grammar, *input).yaml.clean == *tree
+Label = '$BlockLabel - Pegex::Tree::Wrap'
+parse_to_tree('Pegex::Tree::Wrap', *grammar, *input).yaml.clean == *wrap
+Label = '$BlockLabel - t::TestAST'
+parse_to_tree('TestAST', *grammar, *input).yaml.clean == *ast
 
-class TestPegex
-  require 'pegex/tree'
-  require 'pegex/tree/wrap'
-  require 'testast'
-  def run_tree_tests block, expr=nil
-    label '$BlockLabel - Pegex::Tree'
-    run_test(
-      block,
-      "parse_to_tree('Pegex::Tree', *grammar, *input).yaml.clean == *tree",
-    )
+Data = Compile('tree-pegex.tml')
+Label = '$BlockLabel - Pegex::Tree'
+parse_to_tree('Pegex::Tree', *grammar, *input).yaml.clean == *tree
+Label = '$BlockLabel - Pegex::Tree::Wrap'
+parse_to_tree('Pegex::Tree::Wrap', *grammar, *input).yaml.clean == *wrap
+Label = '$BlockLabel - TestAST'
+parse_to_tree('TestAST', *grammar, *input).yaml.clean == *ast
+...
 
-    label('$BlockLabel - Pegex::Tree::Wrap');
-    run_test(
-      block,
-      "parse_to_tree('Pegex::Tree::Wrap', *grammar, *input).yaml.clean == *wrap",
-    )
-
-    label('$BlockLabel - t::TestAST');
-    run_test(
-      block,
-      "parse_to_tree('TestAST', *grammar, *input).yaml.clean == *ast",
-    )
-  end
-
+class TestML::Lite::Bridge
   require 'pegex'
   def parse_to_tree(receiver, grammar, input)
     require receiver.downcase.gsub /::/, '/'

@@ -1,7 +1,7 @@
-require 'testml/lite'
+require 'testml'
 require 'test_pegex'
 
-testml = TestML::Test.new do |t|
+test = TestML::Lite.new do |t|
   t.bridge = TestPegex
 end
 
@@ -13,7 +13,7 @@ class TestPegex
   end
 end
 
-testml.document = <<'...'
+test.testml = <<'...'
 parse_input(*grammar, *input).Catch ~~ *error;
 
 === Error fails at furthest match
