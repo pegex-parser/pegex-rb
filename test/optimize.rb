@@ -1,15 +1,11 @@
+$:.unshift "#{Dir.getwd}/test/lib"
+
 require 'testml'
-require 'test_pegex'
+require 'testml/compiler/lite'
+require 'testml_bridge'
 
-TestML::Lite.new \
-  bridge: TestPegex,
-  testml: <<'...'
-*grammar.compile.optimize.yaml.clean == *yaml
-
-=== Question Mark Expansion
---- grammar
-a: /(:foo)/
---- yaml
-a:
-  .rgx: /(?:foo)/
-...
+TestML.new(
+  testml: 'testml/optimize.tml',
+  bridge: TestMLBridge,
+  compiler: TestML::Compiler::Lite,
+)

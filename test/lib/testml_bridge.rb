@@ -1,11 +1,15 @@
-require 'pegex/compiler'
-require 'recursive_sort'
+require 'testml/bridge'
 
+require 'recursive_sort'
+require 'pegex/compiler'
 require 'pegex/tree'
 require 'pegex/tree/wrap'
 require 'testast'
 
-class TestPegex < TestML::Lite::Bridge
+require 'testml/util'
+include TestML::Util
+
+class TestMLBridge < TestML::Bridge
   def compile grammar_text
     tree = Pegex::Compiler.new.parse(grammar_text.value).combinate.tree
     tree.delete '+toprule'
@@ -27,7 +31,24 @@ class TestPegex < TestML::Lite::Bridge
     yaml.sub! /\A---\s/, ''
     yaml.gsub! /'(\d+)'/, '\1'
     yaml.gsub! /\+eok: true/, '+eok: 1'
-    return yaml
+    return str yaml
+  end
+
+  def compress grammar_text
+    grammar_text = grammar_text.value
+    grammar_text.gsub! /([^;])\n(\w+\s*:)/ do |m|
+      "#{$1};#{$2}"
+    end
+    grammar_text.gsub! /\s/, ''
+
+    # XXX mod/quant ERROR rules are too prtective here:
+    grammar_text.gsub! />%</, '> % <'
+    return str "#{grammar_text}\n"
+  end
+
+  def parse_input grammar, input
+    parser = pegex grammar.value
+    return parser.parse input.value
   end
 
   def optimize tree
