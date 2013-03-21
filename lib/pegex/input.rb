@@ -2,6 +2,7 @@ require 'pegex'
 
 class Pegex::Input
   attr_accessor :string
+  attr_accessor :file
 
   def initialize
     @is_eof = false

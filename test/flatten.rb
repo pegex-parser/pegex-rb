@@ -1,33 +1,30 @@
-__END__
-use Test::More tests => 1;
-use Pegex;
+require 'test/unit'
+require 'pegex'
+require 'pegex/receiver'
 
-my $grammar = <<'...';
+class TestFlatten < Test::Unit::TestCase
+  def test_flatten
+    grammar = <<'...'
 a: (((b)))+
 b: (c | d)
 c: /(x)/
 d: /y/
 ...
+    parser = pegex(grammar, R)
+    got = parser.parse('xxx')
 
-{
-    package R;
-    use base 'Pegex::Receiver';
-    sub got_a {
-        my ($self, $got) = @_;
-        $self->flatten($got);
-        $got;
-    }
-    sub got_b {
-        my ($self, $got) = @_;
-        [$got];
-    }
-    sub got_c {
-        my ($self, $got) = @_;
-        [$got];
-    }
-}
+    assert_equal got.join(''), 'xxx', 'Array was flattened'
+  end
+end
 
-my $parser = pegex($grammar, {receiver => 'R'});
-my $got = $parser->parse('xxx');
-
-is join('', @$got), 'xxx', 'Array was flattened';
+class R < Pegex::Receiver
+  def got_a(got)
+    got.flatten
+  end
+  def got_b(got)
+    [got]
+  end
+  def got_c(got)
+    [got]
+  end
+end

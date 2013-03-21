@@ -1,12 +1,10 @@
-__END__
-use Test::More;
+require 'test/unit'
+require 'pegex/grammar'
+require 'pegex/compiler'
 
-eval "use YAML::XS; 1" or
-    plan skip_all => 'YAML::XS required';
-
-plan tests => 1;
-
-my $grammar_text = <<'...';
+class TestSample < Test::Unit::TestCase
+  def test_sample
+    grammar_text = <<'...'
 contact:
     name_section
     phone_section
@@ -43,7 +41,7 @@ term: /(
 indent: /<BLANK>{2}/
 ...
 
-my $input = <<'...';
+    input = <<'...'
 Name: Ingy Net
 Phone: 919-876-5432
 Address:
@@ -52,21 +50,23 @@ Address:
   OK
 ...
 
-my $want = <<'...';
+    want = <<'...'
 ...
 
-use Pegex::Grammar;
-use Pegex::Compiler;
-my $grammar = Pegex::Grammar->new(
-    tree => Pegex::Compiler->new->compile($grammar_text)->tree,
-);
-my $parser = Pegex::Parser->new(
-    grammar => $grammar,
-);
-my $ast1 = $parser->parse($input);
+    grammar = Pegex::Grammar.new do |i|
+      i.tree = Pegex::Compiler.new.compile(grammar_text).tree
+    end
+    parser = Pegex::Parser.new do |i|
+      i.grammar = grammar
+      # XXX next line not in Perl test
+      i.receiver = Pegex::Receiver.new
+    end
+    ast1 = parser.parse(input)
 
-pass 'parsed'; exit;
+    assert true, 'parsed'
+# TODO
+#     got = YAML.dump(ast1)
+#     assert_equal got, want, 'It works'
+  end
+end
 
-my $got = YAML::XS::Dump($ast1);
-
-is $got, $want, 'It works';

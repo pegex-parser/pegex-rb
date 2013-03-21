@@ -1,6 +1,7 @@
 require 'pegex'
 class Pegex::Grammar
   attr_accessor :text
+  attr_accessor :tree
 
   def initialize
     yield self if block_given?

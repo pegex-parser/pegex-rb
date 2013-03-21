@@ -1,14 +1,10 @@
-__END__
-use 5.10.0;
-use Test::More;
+require 'test/unit'
+require 'pegex'
 
-use Pegex;
-
-my $parser = pegex('a: /<ANY>*?(x+)<ANY>*/');
-is $parser->parse('xxxx')->{a}, 'xxxx',
-    'First parse works';
-
-is $parser->parse('xxxx')->{a}, 'xxxx',
-    'Second parse works';
-
-done_testing;
+class TestRepeat < Test::Unit::TestCase
+  def test_repeat
+    parser = pegex('a: /<ANY>*?(x+)<ANY>*/')
+    assert_equal parser.parse('xxxx')['a'], 'xxxx', 'First parse works'
+    assert_equal parser.parse('xxxx')['a'], 'xxxx', 'Second parse works'
+  end
+end
