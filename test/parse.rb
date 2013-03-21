@@ -1,3 +1,4 @@
+__END__
 # $Pegex::Parser::Debug = 1;
 
 use Test::More tests => 1;

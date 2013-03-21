@@ -1,3 +1,4 @@
+__END__
 use 5.10.0;
 use Test::More;
 

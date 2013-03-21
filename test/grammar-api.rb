@@ -1,18 +1,22 @@
 require 'testml'
-require 'test_pegex'
+require 'testml/compiler/lite'
+require 'testml/util'; include TestML::Util
 require 'pegex/grammar'
 
-TestML::Lite.new testml: <<'...'
+TestML.new(
+  compiler: TestML::Compiler::Lite,
+).testml = <<'...'
+%TestML 0.1.0
 Plan = 1
 # Label = 'MyGrammar1 compiled a tree from its text'
-grammar_api == 'foo'
+grammar_api() == 'foo'
 ...
 
-class TestML::Lite::Library
+class TestML::Bridge
   def grammar_api
     grammar = MyGrammar1.new
     grammar.make_tree
-    grammar.tree['+toprule']
+    native grammar.tree['+toprule']
   end
 end
 
