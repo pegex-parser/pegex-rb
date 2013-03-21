@@ -146,19 +146,16 @@ class Pegex::Parser
       next_.values_at 'rule', 'method', 'kind', '+min', '+max', '.sep'
 
     position, match, count, scount, smin, smax =
-      @position, [], 0, 0, sep.values_at('+min', '+max')
-
+      @position, [], 0, 0, *(sep.values_at('+min', '+max'))
     while return_ = method.call(rule, next_)
       position = @position
       count += 1
-      match.concat return_
+      match.concat(return_)
       return_ = match_next(sep) or break
-      match.concat return_
+      match.concat(smax == 1 ? return_ : return_[0]) if !return_.empty?
       scount += 1
     end
-    if max != 1
-      match = [match]
-    end
+    match = [match] if max != 1
     result = count >= min and (max == 0 or count <= max)
     if count == scount and not sep['+eok']
       @farthest = position if (@position = position) > @farthest
