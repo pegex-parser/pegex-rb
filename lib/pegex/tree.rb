@@ -1,4 +1,3 @@
-require 'pegex'
 require 'pegex/receiver'
 
 class Pegex::Tree < Pegex::Receiver

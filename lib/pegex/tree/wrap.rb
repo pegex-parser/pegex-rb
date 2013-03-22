@@ -2,7 +2,7 @@ require 'pegex/tree'
 
 class Pegex::Tree::Wrap < Pegex::Tree
   def gotrule got
-    return got if @parser.parent['-pass']
+    return got || $pegex_nil if @parser.parent['-pass']
     return $pegex_nil unless got
     return @parser.rule => got
   end
