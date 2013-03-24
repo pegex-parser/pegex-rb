@@ -2,7 +2,7 @@ require 'pegex/receiver'
 
 class Pegex::Tree < Pegex::Receiver
   def gotrule got=nil
-    return $pegex_nil if got.nil?
+    return Pegex::Constant::Null if got.nil?
 
     if self.parser.parent['-wrap']
       return {self.parser.rule => (got || [])}

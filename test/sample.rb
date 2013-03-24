@@ -1,6 +1,4 @@
 require 'test/unit'
-require 'pegex/grammar'
-require 'pegex/compiler'
 
 class TestSample < Test::Unit::TestCase
   def test_sample
@@ -53,12 +51,14 @@ Address:
     want = <<'...'
 ...
 
+    require 'pegex/grammar'
+    require 'pegex/receiver'
+    require 'pegex/compiler'
     grammar = Pegex::Grammar.new do |i|
       i.tree = Pegex::Compiler.new.compile(grammar_text).tree
     end
     parser = Pegex::Parser.new do |i|
       i.grammar = grammar
-      # XXX next line not in Perl test
       i.receiver = Pegex::Receiver.new
     end
     ast1 = parser.parse(input)

@@ -1,11 +1,15 @@
 require 'pegex/input'
 
-$pegex_nil = []
-$dummy = [1]
+module Pegex::Constant
+  Null = []
+  Dummy = []
+end
 
 class Pegex::Parser
   attr_accessor :grammar
   attr_accessor :receiver
+  attr_accessor :input
+
   attr_accessor :parent
   attr_accessor :rule
   attr_accessor :debug
@@ -14,18 +18,16 @@ class Pegex::Parser
     @position = 0
     @farthest = 0
     @optimized = false
-    @debug = false
     @throw_on_error = true
-    # @debug = true
+    @debug = ENV['RUBY_PEGEX_DEBUG'] || $PegexParserDebug || false
     yield self if block_given?
   end
 
   def parse input, start=nil
     @position = 0
-    if input.kind_of? String
-      input = Pegex::Input.new do |i|
-        i.string = input
-      end
+
+    if not input.kind_of? Pegex::Input
+      input = Pegex::Input.new {|i| i.string = input}
     end
     @input = input
     @input.open unless @input.open?
@@ -40,18 +42,20 @@ class Pegex::Parser
       (@tree['TOP'] ? 'TOP' : nil) or
         fail "No starting rule for Pegex::Parser::parse"
 
-    optimize_grammar start_rule_ref
+    optimize_grammar(start_rule_ref)
 
-    fail  "No 'receiver'. Can't parse" unless @receiver
+    fail "No 'receiver'. Can't parse" unless @receiver
 
-    # XXX does ruby have problems with circulat references
+    # XXX does ruby have problems with circulat references?
     @receiver.parser = self
 
     if @receiver.respond_to? 'initial'
-      @rule, @parent = $start_rule_ref, {}
+      @rule = start_rule_ref
+      @parent = {}
+      @receiver.initial
     end
 
-    match = match_ref start_rule_ref, {}
+    match = match_ref(start_rule_ref, {})
 
     @input.close
 
@@ -61,7 +65,8 @@ class Pegex::Parser
     end
 
     if @receiver.respond_to? 'final'
-      @rule, @parent = start_rule_ref, {}
+      @rule = start_rule_ref
+      @parent = {}
       match = [ @receiver.final(match.first) ]
     end
 
@@ -72,9 +77,9 @@ class Pegex::Parser
     return if @optimized
     @tree.each_pair do |name, node|
       next if node.kind_of? String
-      optimize_node node
+      optimize_node(node)
     end
-    optimize_node '.ref' => start
+    optimize_node('.ref' => start)
     @optimized = true
   end
 
@@ -88,8 +93,8 @@ class Pegex::Parser
       end
     end
     min, max = node.values_at '+min', '+max'
-    node['+min'] ||= max == nil ? 1 : 0
-    node['+max'] ||= min == nil ? 1 : 0
+    node['+min'] ||= max.nil? ? 1 : 0
+    node['+max'] ||= min.nil? ? 1 : 0
     node['+asr'] ||= nil
     node['+min'] = node['+min'].to_i
     node['+max'] = node['+max'].to_i
@@ -111,12 +116,12 @@ class Pegex::Parser
       node['rule'] = Regexp.new "\\A#{node['.rgx']}"
     end
     if sep = node['.sep']
-      optimize_node sep
+      optimize_node(sep)
     end
   end
 
   def match_next next_
-    return match_next_with_sep next_ if next_['.sep']
+    return match_next_with_sep(next_) if next_['.sep']
 
     rule, method, kind, min, max, assertion =
       next_.values_at 'rule', 'method', 'kind', '+min', '+max', '+asr'
@@ -126,7 +131,7 @@ class Pegex::Parser
     while return_ = method.call(rule, next_)
       position = @position unless assertion
       count += 1
-      match.concat return_ unless return_.equal? $pegex_nil
+      match.concat return_
       break if max == 1
     end
     if max != 1
@@ -134,7 +139,7 @@ class Pegex::Parser
       @farthest = position if (@position = position) > @farthest
     end
     result = (count >= min and (max == 0 or count <= max)) ^ (assertion == -1)
-    if not result or assertion
+    if not(result) or assertion
       @farthest = position if (@position = position) > @farthest
     end
 
@@ -161,37 +166,37 @@ class Pegex::Parser
       @farthest = position if (@position = position) > @farthest
     end
 
-    return result ? next_['-skip'] ? [] : match : false
+    return(result ? next_['-skip'] ? [] : match : false)
   end
 
   def match_ref ref, parent
     rule = @tree[ref]
     match = match_next(rule) or return false
-    return $dummy unless rule['action']
+    return Pegex::Constant::Dummy unless rule['action']
     @rule, @parent = ref, parent
     result = rule['action'].call(match.first)
-    return (result.equal? $pegex_nil) ? result : [result]
+    return (result.equal? Pegex::Constant::Null) ? result : [result]
   end
 
   def match_rgx regexp, parent=nil
-    # TODO no need for position variable. just use @position
-    position = @position
-    string = @buffer[position .. -1]
-    (m = string.match regexp) or return false
-    position += m[0].length
+    buffer = @buffer[@position .. -1]
+    (m = buffer.match regexp) or return false
+    @position += m[0].length
     # TODO use m.captures
     match = m[1..-1]
     match = [ match ] if m.length > 2
-    @farthest = position if (@position = position) > @farthest
+    @farthest = @position if @position > @farthest
     return match
   end
 
   def match_all list, parent=nil
-    position, set, len = @position, [], 0
+    position = @position
+    set = []
+    len = 0
     list.each do |elem|
       if match = match_next(elem)
-        if !elem['+asr'] and !elem['-skip']
-          set.concat match
+        if !(elem['+asr'] or elem['-skip'])
+          set.concat(match)
           len += 1
         end
       else
@@ -205,7 +210,7 @@ class Pegex::Parser
 
   def match_any list, parent=nil
     list.each do |elem|
-      if (match = match_next elem)
+      if (match = match_next(elem))
         return match
       end
     end
@@ -213,18 +218,18 @@ class Pegex::Parser
   end
 
   def match_err error, parent=nil
-    throw_error error
+    throw_error(error)
   end
 
   def match_ref_trace ref, parent
     rule = @tree[ref]
-    trace_on = ! rule['+asr']
-    trace "try_#{ref}" if trace_on
+    trace = ! rule['+asr']
+    trace("try_#{ref}") if trace
     result = nil
-    if (result = match_ref ref, parent)
-      trace "got_#{ref}" if trace_on
+    if (result = match_ref(ref, parent))
+      trace("got_#{ref}") if trace
     else
-      trace "not_#{ref}" if trace_on
+      trace("not_#{ref}") if trace
     end
     return result
   end
@@ -242,13 +247,7 @@ class Pegex::Parser
     $stderr.print indent ? " >#{snippet}<\n" : "\n"
   end
 
-  def throw_error msg
-    raise msg
-  end
-
-  class PegexParseError < RuntimeError
-
-  end
+  class PegexParseError < RuntimeError;end
 
   def throw_error msg
     @error = format_error msg
