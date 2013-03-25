@@ -57,20 +57,20 @@ class Pegex::Pegex::AST < Pegex::Tree
       group[@prefixes[prefix]] = 1
     end
     unless suffix.empty?
-      set_quantity group, suffix
+      set_quantity(group, suffix)
     end
     return group
   end
 
   def got_all_group got
-    list = get_group got
+    list = get_group(got)
     fail unless list.length > 0
     return list.first if list.length == 1
     return '.all' => list
   end
 
   def got_any_group got
-    list = get_group got
+    list = get_group(got)
     fail unless list.length > 0
     return list.first if list.length == 1
     return '.any' => list
@@ -96,10 +96,10 @@ class Pegex::Pegex::AST < Pegex::Tree
     if (regex = @atoms[ref])
       @extra_rules[ref] = {'.rgx' => regex}
     end
-    unless suffix.empty?
-      set_quantity node, suffix
+    if !suffix.empty?
+      set_quantity(node, suffix)
     end
-    unless prefix.empty?
+    if !prefix.empty?
       if @prefixes[prefix].kind_of? Array
         key, val = @prefixes[prefix]
       else
