@@ -14,14 +14,8 @@ class TestMLTestCase < Test::Unit::TestCase
     ).run(self)
   end
 
-  %w(
-    testml/optimize.tml
-    testml/tree.tml
-    testml/error.tml
-    testml/tree-pegex.tml
-    testml/compiler.tml
-    testml/compiler-checks.tml
-    testml/compiler-equivalence.tml
+  (Dir.glob('test/testml/*.tml')
+    .collect {|f| f.sub(/^test\//, '')}
   ).each do |file|
     method_name = 'test_' + file.gsub(/\W+/, '_').sub(/_tml$/, '')
     define_method(method_name.to_sym) do
