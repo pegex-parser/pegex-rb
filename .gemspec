@@ -2,7 +2,7 @@
 
 GemSpec = Gem::Specification.new do |gem|
   gem.name = 'pegex'
-  gem.version = '0.0.2'
+  gem.version = '0.0.3'
   gem.license = 'MIT'
   gem.required_ruby_version = '>= 1.9.1'
 
@@ -17,5 +17,5 @@ that will work equivalently in lots of programming languages!
 
   gem.files = `git ls-files`.lines.map{|l|l.chomp}
 
-  gem.add_development_dependency 'testml-lite', '>= 0.0.1'
+  gem.add_development_dependency 'testml', '>= 0.0.2'
 end

@@ -1,3 +1,6 @@
+- version: 0.0.3
+  date:    Sat Apr 20 07:03:20 CST 2013
+  changes: Major refactoring release
 - version: 0.0.2
   date:    Wed Dec 19 23:58:14 PST 2012
   changes: Fixed a regex bug
