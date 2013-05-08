@@ -42,9 +42,9 @@ class Pegex::Parser
       (@tree['TOP'] ? 'TOP' : nil) or
         fail "No starting rule for Pegex::Parser::parse"
 
-    optimize_grammar(start_rule_ref)
-
     fail "No 'receiver'. Can't parse" unless @receiver
+
+    optimize_grammar(start_rule_ref)
 
     # XXX does ruby have problems with circulat references?
     @receiver.parser = self
