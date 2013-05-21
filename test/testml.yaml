@@ -1,3 +1,21 @@
 source_testml_dir: ../../pegex-tml
 local_testml_dir: ./testml
-exclude_testml_files: []
+test_file_prefix: testml-
+test_file_template: |
+  require 'test/unit'
+  $:.unshift "#{Dir.getwd}/lib"
+  require 'testml'
+  require 'testml/compiler/lite'
+  $:.unshift "#{Dir.getwd}/test"
+  $:.unshift "#{Dir.getwd}/test/lib"
+  require 'testml_bridge'
+
+  class TestMLTestCase < Test::Unit::TestCase
+    def test_%{name}
+      TestML.new(
+        testml: '%{file}',
+        bridge: TestMLBridge,
+        compiler: TestML::Compiler::Lite,
+      ).run(self)
+    end
+  end

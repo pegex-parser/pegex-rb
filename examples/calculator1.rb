@@ -2,9 +2,9 @@ require 'pegex'
 require 'pegex/tree'
 
 $grammar = <<'...';
-expr: add_sub
-add_sub: mul_div+ % /~([<PLUS><DASH>])~/
-mul_div: exp+ % /~([<STAR><SLASH>])~/
+expr: add-sub
+add-sub: mul-div+ % /~([<PLUS><DASH>])~/
+mul-div: exp+ % /~([<STAR><SLASH>])~/
 exp: token+ % /~<CARET>~/
 token: /~<LPAREN>~/ expr /~<RPAREN>~/ | number
 number: /~(<DASH>?<DIGIT>+)~/

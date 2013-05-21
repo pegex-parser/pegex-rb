@@ -46,6 +46,7 @@ class Pegex::Pegex::AST < Pegex::Tree
 
   def got_rule_definition got
     name, value = got
+    name.gsub! /-/, '_'
     @toprule = name if name == 'TOP'
     @toprule ||= name
     return { name => value }
@@ -92,6 +93,7 @@ class Pegex::Pegex::AST < Pegex::Tree
   def got_rule_reference got
     prefix, ref1, ref2, suffix = got
     ref = ref1 || ref2 # TODO: determine if ref1 is falsy enough
+    ref.gsub! /-/, '_'
     node = { '.ref' => ref }
     if (regex = @atoms[ref])
       @extra_rules[ref] = {'.rgx' => regex}
