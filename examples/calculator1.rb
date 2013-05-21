@@ -47,30 +47,29 @@ def calc(expr)
   calculator = pegex($grammar, receiver=Calculator)
   begin
     result = calculator.parse(expr)
-    print "#{expr} = #{result}"
+    puts "#{expr} = #{result}"
   rescue
-    print $!
+    puts $!
   end
 end
 
 loop do
   STDOUT.write "\nEnter an equation: "
-  input = STDIN.readline
-  input.chomp!
+  input = STDIN.readline.chomp
   break if input.empty?
   calc input
 end
 
-# calc '2';
-# calc '2 * 4';
-# calc '2 * 4 + 6';
-# calc '2 + 4 * 6 + 1';
-# calc '2 + (4 + 6) * 8';
-# calc '(((2 + (((4 + (6))) * (8)))))';
-# calc '2 ^ 3 ^ 2';
-# calc '2 ^ (3 ^ 2)';
-# calc '2 * 2^3^2';
-# calc '(2^5)^2';
-# calc '2^5^2';
-# calc '0*1/(2+3)-4^5';
-# calc '2/3+1';
+# calc '2'
+# calc '2 * 4'
+# calc '2 * 4 + 6'
+# calc '2 + 4 * 6 + 1'
+# calc '2 + (4 + 6) * 8'
+# calc '(((2 + (((4 + (6))) * (8)))))'
+# calc '2 ^ 3 ^ 2'
+# calc '2 ^ (3 ^ 2)'
+# calc '2 * 2^3^2'
+# calc '(2^5)^2'
+# calc '2^5^2'
+# calc '0*1/(2+3)-4^5'
+# calc '2/3+1'
